@@ -1,11 +1,11 @@
 ﻿namespace WebApi1.Services.Interfaces
 {
-    public interface IService<T> where T : class
+    public interface IService<TEntity> where TEntity : class
     {
-        T GetById(int id);
-        List<T> GetAll();
-        T Create(T entity);
-        T Update(T entity);
-        string DeleteById(int id);
+        Task<TEntity> GetById(int id);
+        Task<List<TEntity>> GetAll();
+        Task<TEntity> Create(TEntity entity);
+        Task<TEntity> Update(TEntity entity);
+        Task<string> DeleteById(int id);
     }
 }

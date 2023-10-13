@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.AccessControl;
 using WebApi1.Models;
+using WebApi1.Services;
 using WebApi1.Services.Interfaces;
 
 namespace WebApi1.Controllers
@@ -18,33 +19,68 @@ namespace WebApi1.Controllers
         }
 
         [HttpGet("{authorId}")]
-        public Author GetAuthorById(int authorId)
+        public async Task<IActionResult> GetAuthorById(int authorId)
         {
-            return _authorService.GetById(authorId);
+            try
+            {
+                return Ok(await _authorService.GetById(authorId));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
-        public List<Author> GetAuthors()
+        public async Task<IActionResult> GetAuthors()
         {
-            return _authorService.GetAll();
+            try
+            {
+                return Ok(await _authorService.GetAll());
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
-        public Author CreateAuthor(Author author)
+        public async Task<IActionResult> CreateAuthor(Author author)
         {
-            return _authorService.Create(author);
+            try
+            {
+                return Ok(await _authorService.Create(author));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut]
-        public Author UpdateAuthor(Author author)
+        public async Task<IActionResult> UpdateAuthor(Author author)
         {
-            return _authorService.Update(author);
+            try
+            {
+                return Ok(await _authorService.Update(author));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{authorId}")]
-        public string DeleteAuthorById(int authorId)
+        public async Task<IActionResult> DeleteAuthorById(int authorId)
         {
-            return _authorService.DeleteById(authorId);
+            try
+            {
+                return Ok(await _authorService.DeleteById(authorId));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 

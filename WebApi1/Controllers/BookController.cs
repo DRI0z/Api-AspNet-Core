@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Security.AccessControl;
 using WebApi1.Models;
 using WebApi1.Services.Interfaces;
@@ -11,33 +12,57 @@ namespace WebApi1.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;
-        private readonly IAuthorService _authorService;
 
-        public BookController(IBookService bookService, IAuthorService authorService)
+        public BookController(IBookService bookService)
         {
             _bookService = bookService;
-            _authorService = authorService;
         }
 
         [HttpGet("{bookId}")]
-        public Book GetBookById(int bookId)
-        {
-            return _bookService.GetById(bookId);
-        }
-
-        [HttpGet]
-        public List<Book> GetBooks()
-        {
-            return _bookService.GetAll();
-        }
-
-        [HttpPost]
-        public IActionResult CreateBook(Book book)
+        public async Task<IActionResult> GetBookById(int bookId)
         {
             try
             {
-                book.Author = _authorService.GetById(book.AuthorId);
-                return Ok(_bookService.Create(book));
+                return Ok(await _bookService.GetById(bookId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{authorId}")]
+        public async Task<IActionResult> GetBooksByAuthorId(int authorId)
+        {
+            try
+            {
+                return Ok(await _bookService.GetBooksByAuthorId(authorId));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetBooks()
+        {
+            try
+            {
+                return Ok(await _bookService.GetAll());
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateBook(Book book)
+        {
+            try
+            {
+                return Ok(await _bookService.Create(book));
             }
             catch (Exception ex)
             {
@@ -46,15 +71,29 @@ namespace WebApi1.Controllers
         }
 
         [HttpPut]
-        public Book UpdateBook(Book book)
+        public async Task<IActionResult> UpdateBook(Book book)
         {
-            return _bookService.Update(book);
+            try
+            {
+                return Ok(await _bookService.Update(book));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{bookId}")]
-        public string DeleteBookById(int bookId)
+        public async Task<IActionResult> DeleteBookById(int bookId)
         {
-            return _bookService.DeleteById(bookId);
+            try
+            {
+                return Ok(await _bookService.DeleteById(bookId));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
